@@ -50,3 +50,7 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Ignore the build/ directory and any generated configuration files
+build/
+sdkconfig*
