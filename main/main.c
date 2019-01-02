@@ -25,26 +25,12 @@ static EventGroupHandle_t wifi_event_group = NULL;
 ///////////////////////////////////////////////////////////////////////////////
 // EVENT HANDLERS
 
-void wifi_connect(void)
-{
-    wifi_config_t sta_config = {
-        .sta = {
-            .ssid      = CONFIG_ESP_WIFI_SSID,
-            .password  = CONFIG_ESP_WIFI_PASSWORD,
-            .bssid_set = false
-        }
-    };
-    ESP_ERROR_CHECK( esp_wifi_set_config(WIFI_IF_STA, &sta_config) );
-    ESP_ERROR_CHECK( esp_wifi_start() );
-    ESP_ERROR_CHECK( esp_wifi_connect() );
-}
-
 esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 {
     switch (event->event_id)
     {
     case SYSTEM_EVENT_STA_START:
-        wifi_connect();
+        wifi_connect(CONFIG_ESP_WIFI_SSID, CONFIG_ESP_WIFI_PASSWORD);
         break;
     case SYSTEM_EVENT_STA_GOT_IP:
         xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);

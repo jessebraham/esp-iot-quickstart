@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "esp_log.h"
 #include "esp_wifi.h"
 #include "nvs_flash.h"
@@ -30,4 +32,15 @@ void initialize_device(EventGroupHandle_t *wifi_event_group)
     ESP_ERROR_CHECK( esp_wifi_init(&cfg) );
     ESP_ERROR_CHECK( esp_wifi_set_storage(WIFI_STORAGE_RAM) );
     ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_STA) );
+}
+
+void wifi_connect(const char *ssid, const char *pass)
+{
+    wifi_config_t sta_config = { .sta = {} };
+    memcpy(sta_config.sta.ssid,     ssid, strlen(ssid));
+    memcpy(sta_config.sta.password, pass, strlen(pass));
+
+    ESP_ERROR_CHECK( esp_wifi_set_config(WIFI_IF_STA, &sta_config) );
+    ESP_ERROR_CHECK( esp_wifi_start() );
+    ESP_ERROR_CHECK( esp_wifi_connect() );
 }
