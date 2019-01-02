@@ -12,4 +12,10 @@ config ESP_WIFI_PASSWORD
     help
 	    WiFi password (WPA or WPA2) for the example to use.
 
+config ESP_MQTT_BROKER_URI
+    string "MQTT Broker URI"
+    default "mqtt://localhost:1883"
+    help
+        MQTT Broker URI (hostname and port), optionally includes username/password
+
 endmenu
