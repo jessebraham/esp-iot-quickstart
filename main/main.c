@@ -6,8 +6,7 @@
 #include "esp_wifi.h"
 #include "sdkconfig.h"
 
-#include "mqtt_helpers.h"
-#include "startup.h"
+#include "iot_utils.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////

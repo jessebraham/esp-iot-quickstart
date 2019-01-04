@@ -4,7 +4,7 @@
 #include "esp_wifi.h"
 #include "nvs_flash.h"
 
-#include "startup.h"
+#include "iot_utils.h"
 
 
 void initialize_device(void)
@@ -43,4 +43,16 @@ void wifi_connect(const char *ssid, const char *pass)
     ESP_ERROR_CHECK( esp_wifi_set_config(WIFI_IF_STA, &sta_config) );
     ESP_ERROR_CHECK( esp_wifi_start() );
     ESP_ERROR_CHECK( esp_wifi_connect() );
+}
+
+void connect_to_mqtt_broker(
+    const char *uri, esp_err_t (* fn)(esp_mqtt_event_handle_t)
+)
+{
+    const esp_mqtt_client_config_t mqtt_cfg = {
+        .uri          = uri,
+        .event_handle = fn,
+    };
+    esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
+    esp_mqtt_client_start(client);
 }
