@@ -1,21 +1,27 @@
 menu "esp-iot-quickstart config"
 
-config ESP_WIFI_SSID
+config WIFI_SSID
     string "WiFi SSID"
     default "myssid"
     help
 	    SSID (network name) for the example to connect to.
 
-config ESP_WIFI_PASSWORD
+config WIFI_PASSWORD
     string "WiFi Password"
     default "mypassword"
     help
 	    WiFi password (WPA or WPA2) for the example to use.
 
-config ESP_MQTT_BROKER_URI
+config MQTT_BROKER_URI
     string "MQTT Broker URI"
     default "mqtt://localhost:1883"
     help
         MQTT Broker URI (hostname and port), optionally includes username/password
+
+config LOGGING_TAG
+    string "Debug logging tag"
+    default "ESP-IOT-QUICKSTART"
+    help
+        The string to prefix each logging event originating from the application with
 
 endmenu

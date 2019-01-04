@@ -11,7 +11,7 @@
 // CONSTANTS & GLOBALS
 
 // logging
-static const char *TAG = "ESP-IOT-QUICKSTART";
+static const char *TAG = CONFIG_LOGGING_TAG;
 
 // wifi
 const  int                CONNECTED_BIT    = BIT0;
@@ -55,12 +55,12 @@ esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
     {
     case SYSTEM_EVENT_STA_START:
         ESP_LOGI(TAG, "wifi adapter started");
-        wifi_connect(CONFIG_ESP_WIFI_SSID, CONFIG_ESP_WIFI_PASSWORD);
+        wifi_connect(CONFIG_WIFI_SSID, CONFIG_WIFI_PASSWORD);
         break;
     case SYSTEM_EVENT_STA_GOT_IP:
         ESP_LOGI(TAG, "received ip address");
         xEventGroupSetBits(wifi_event_group, CONNECTED_BIT);
-        connect_to_mqtt_broker(CONFIG_ESP_MQTT_BROKER_URI, &mqtt_event_handler);
+        connect_to_mqtt_broker(CONFIG_MQTT_BROKER_URI, &mqtt_event_handler);
         break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
         ESP_LOGI(TAG, "disconnected from wireless network");
