@@ -1,3 +1,6 @@
+#include "freertos/FreeRTOS.h"
+#include "freertos/event_groups.h"
+
 #include "esp_event_loop.h"
 #include "esp_log.h"
 #include "esp_wifi.h"
@@ -13,8 +16,9 @@
 // logging
 static const char *TAG = CONFIG_LOGGING_TAG;
 
-// wifi
+// wifi & mqtt
 const  int                CONNECTED_BIT    = BIT0;
+static EventGroupHandle_t mqtt_event_group = NULL;
 static EventGroupHandle_t wifi_event_group = NULL;
 
 
@@ -27,9 +31,11 @@ esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
     {
     case MQTT_EVENT_CONNECTED:
         ESP_LOGI(TAG, "connected to mqtt broker");
+        xEventGroupSetBits(mqtt_event_group, CONNECTED_BIT);
         break;
     case MQTT_EVENT_DISCONNECTED:
         ESP_LOGI(TAG, "disconnected from mqtt broker");
+        xEventGroupClearBits(mqtt_event_group, CONNECTED_BIT);
         break;
     case MQTT_EVENT_SUBSCRIBED:
         break;
@@ -80,10 +86,14 @@ esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 
 void app_main(void)
 {
+    // create the event groups for the mqtt component and the wifi peripheral
+    mqtt_event_group = xEventGroupCreate();
+    wifi_event_group = xEventGroupCreate();
+
     // perform any necessary initialization/configuration of the device and its
     // peripherals
     ESP_LOGI(TAG, "initializing device peripherals...");
-    initialize_device(&wifi_event_group);
+    initialize_device();
 
     // set the event loop handler for wifi and start the wifi peripheral
     ESP_ERROR_CHECK( esp_event_loop_init(wifi_event_handler, NULL) );
