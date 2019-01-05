@@ -1,5 +1,3 @@
-#include <string.h>
-
 #include "esp_log.h"
 #include "esp_wifi.h"
 #include "nvs_flash.h"
@@ -33,13 +31,16 @@ void initialize_device(void)
     ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_STA) );
 }
 
-void wifi_connect(const char *ssid, const char *pass)
+void connect_to_wifi_network(const char *ssid, const char *pass)
 {
-    wifi_config_t sta_config = { .sta = {} };
+    // Populate the configuration struct with the provided SSID and password.
+    wifi_config_t sta_config = {
+        .sta = {}
+    };
     memcpy(sta_config.sta.ssid,     ssid, strlen(ssid));
     memcpy(sta_config.sta.password, pass, strlen(pass));
 
-    // Connect to the specified wifi network using the provided password.
+    // Attempt to connect to the network using the above configuration struct.
     ESP_ERROR_CHECK( esp_wifi_set_config(WIFI_IF_STA, &sta_config) );
     ESP_ERROR_CHECK( esp_wifi_start() );
     ESP_ERROR_CHECK( esp_wifi_connect() );
@@ -49,6 +50,9 @@ void connect_to_mqtt_broker(
     const char *uri, esp_err_t (* fn)(esp_mqtt_event_handle_t)
 )
 {
+    // Populate the configuration struct with the provided URI and a pointer
+    // to the event handler function before initializing and starting the
+    // MQTT client.
     const esp_mqtt_client_config_t mqtt_cfg = {
         .uri          = uri,
         .event_handle = fn,

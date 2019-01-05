@@ -89,7 +89,7 @@ esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
     {
     case SYSTEM_EVENT_STA_START:
         ESP_LOGI(TAG, "wifi adapter started");
-        wifi_connect(CONFIG_WIFI_SSID, CONFIG_WIFI_PASSWORD);
+        connect_to_wifi_network(CONFIG_WIFI_SSID, CONFIG_WIFI_PASSWORD);
         break;
     case SYSTEM_EVENT_STA_GOT_IP:
         ESP_LOGI(TAG, "received ip address");
