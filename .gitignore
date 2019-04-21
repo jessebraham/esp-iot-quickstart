@@ -54,3 +54,6 @@ dkms.conf
 # Ignore the build/ directory and any generated configuration files
 build/
 sdkconfig*
+
+# Ignore VSCode config
+.vscode/
